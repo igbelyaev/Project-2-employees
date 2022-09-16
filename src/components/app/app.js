@@ -14,9 +14,9 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {name: 'John C.', salary: 800, premia: true, id: 1},
-                {name: 'Alex M.', salary: 3000, premia: false, id: 2},
-                {name: 'Carl W.', salary: 7000, premia: true, id: 3}
+                {name: 'John C.', salary: 800, premia: true, promotion: true, id: 1},
+                {name: 'Alex M.', salary: 3000, premia: false, promotion: false, id: 2},
+                {name: 'Carl W.', salary: 7000, premia: true, promotion: false, id: 3}
             ]
         }
         this.maxId = 4;
@@ -49,39 +49,68 @@ class App extends Component {
                 name, 
                 salary,
                 increase: false,
+                premia: true,
                 id: this.maxId
             }
             
-            // this.newRecord.name = name;
-            // this.newRecord.salary = salary;
-            // this.newRecord.id = this.maxId;
             this.maxId++;
 
-            // const newItem = this.newRecord;
-            const arr = this.state.data.slice();
-
-
-            arr.push(newItem);
-            // arr.push(this.newRecord);
-            // console.log(this.newRecord);
-            // console.log(arr);
-            // console.log(this.maxId);
-
+            // const arr = this.state.data.slice();
+            // arr.push(newItem);
+            
+            // this.setState(({data}) => {
+            //     const arr = [...data, newItem];
+            //     return {
+            //         data: arr
+            //     }
+    
+            // })
+            
             this.setState(({data}) => {
-                // const arr = [...data, newItem];
+                const arr = [...data, newItem];
                 return {
                     data: arr
                 }
     
-            })   
+            })
+            
         }    
     }
 
+    onTogglePremia = (id) => {
+        // this.setState(({data}) => {
+        //     const index = data.findIndex(elem => elem.id === id);
 
+        //     const old = data[index];
+        //     const newItem = {...old, premia: !old.premia};
+
+        //     const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+        //     return {
+        //         data: newArr
+        //     }
+        // })
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if (item.id === id) {
+                    return {...item, premia: !item.premia}
+                }
+                return item;
+            })
+        }))
+
+    }
+
+    onTogglePromotion = (id) => {
+        console.log(`promotion this ${id}`);
+
+    }
+
+    
     render() {
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo 
+                    data={this.state.data}/>
     
                 <div className="search-panel">
                     <SearchPanel/>
@@ -90,7 +119,9 @@ class App extends Component {
     
                 <EmployeesList 
                     data={this.state.data} 
-                    onDelete={this.deleteItem}/>
+                    onDelete={this.deleteItem}
+                    onTogglePremia={this.onTogglePremia}
+                    onTogglePromotion={this.onTogglePromotion}/>
                 <EmployeesAddForm
                     onSubmit={this.addRecord} />
             </div>
