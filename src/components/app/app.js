@@ -77,40 +77,62 @@ class App extends Component {
         }    
     }
 
-    onTogglePremia = (id) => {
-        // this.setState(({data}) => {
-        //     const index = data.findIndex(elem => elem.id === id);
+    // onTogglePremia = (id) => {
+    //     // this.setState(({data}) => {
+    //     //     const index = data.findIndex(elem => elem.id === id);
 
-        //     const old = data[index];
-        //     const newItem = {...old, premia: !old.premia};
+    //     //     const old = data[index];
+    //     //     const newItem = {...old, premia: !old.premia};
 
-        //     const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
-        //     return {
-        //         data: newArr
-        //     }
-        // })
+    //     //     const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+    //     //     return {
+    //     //         data: newArr
+    //     //     }
+    //     // })
+    //     this.setState(({data}) => ({
+    //         data: data.map(item => {
+    //             if (item.id === id) {
+    //                 return {...item, premia: !item.premia}
+    //             }
+    //             return item;
+    //         })
+    //     }))
+
+    // }
+
+    // onTogglePromotion = (id) => {
+    //     this.setState(({data}) => ({
+    //         data: data.map(item => {
+    //             if (item.id === id) {
+    //                 return {...item, promotion: !item.promotion}
+    //             }
+    //             return item;
+    //         })
+    //     }))
+    // }
+
+    onToggleProp = (id, prop) => {
         this.setState(({data}) => ({
             data: data.map(item => {
                 if (item.id === id) {
-                    return {...item, premia: !item.premia}
+                    return {...item, [prop]: !item[prop]}
                 }
                 return item;
             })
         }))
-
-    }
-
-    onTogglePromotion = (id) => {
-        console.log(`promotion this ${id}`);
-
     }
 
     
     render() {
+        const emplAmount = this.state.data.length;
+        const premiaAmount = this.state.data.filter(item => item.premia).length; 
+
         return (
             <div className="app">
                 <AppInfo 
-                    data={this.state.data}/>
+                    // data={this.state.data}
+                    emplAmount={emplAmount}
+                    premiaAmount={premiaAmount} />
     
                 <div className="search-panel">
                     <SearchPanel/>
@@ -120,8 +142,7 @@ class App extends Component {
                 <EmployeesList 
                     data={this.state.data} 
                     onDelete={this.deleteItem}
-                    onTogglePremia={this.onTogglePremia}
-                    onTogglePromotion={this.onTogglePromotion}/>
+                    onToggleProp={this.onToggleProp}/>
                 <EmployeesAddForm
                     onSubmit={this.addRecord} />
             </div>
