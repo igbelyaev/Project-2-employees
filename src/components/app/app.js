@@ -124,29 +124,39 @@ class App extends Component {
         }))
     }
 
-    searchEmp = (items, term, filter) => {
-        let arr = [];
+    // searchEmp = (items, term, filter) => {
+    //     let arr = [];
         
-        if (term.length != 0) {
-            arr = items.filter(item => {
-                return item.name.indexOf(term) > -1
-            })
-        } else { 
-            arr = items; 
-        }
+    //     if (term.length != 0) {
+    //         arr = items.filter(item => {
+    //             return item.name.indexOf(term) > -1
+    //         })
+    //     } else { 
+    //         arr = items; 
+    //     }
         
-        switch (filter) {
-            case 'all':
-                break;
-            case 'promotion':
-                arr = arr.filter(item => item.promotion );
-                break;
-            case '1000':
-                arr = arr.filter(item => +item.salary >= 1000);
-                break;    
+    //     switch (filter) {
+    //         case 'all':
+    //             break;
+    //         case 'promotion':
+    //             arr = arr.filter(item => item.promotion );
+    //             break;
+    //         case '1000':
+    //             arr = arr.filter(item => +item.salary >= 1000);
+    //             break;    
+    //     }
+
+    //     return arr;
+    // }
+
+    searchEmp = (items, term) => {
+        if (term.length === 0) { 
+            return items; 
         }
 
-        return arr;
+        return items.filter(item => {
+            return item.name.indexOf(term) > -1
+        })
     }
 
     onUpdateSearch = (term) => {
@@ -157,11 +167,26 @@ class App extends Component {
         this.setState({filter: typeOf});    
     }
 
+    filterPost = (items, filter) => {
+        switch (filter) {
+            case 'promotion':
+                return items.filter(item => item.promotion);
+            case '1000':
+                return items.filter(item => item.salary > 1000);
+            default:
+                return items;
+        }
+    }
+
+    onFilterSelect = (filter) => {
+        this.setState({filter});
+    }
+
     render() {
         const {data, term, filter} = this.state;
         const emplAmount = this.state.data.length;
         const premiaAmount = this.state.data.filter(item => item.premia).length; 
-        const visibleData = this.searchEmp(data, term, filter);
+        const visibleData = this.filterPost(this.searchEmp(data, term), filter);
 
         return (
             <div className="app">
@@ -172,7 +197,9 @@ class App extends Component {
     
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-                    <AppFilter filter={this.filter}/>
+                    <AppFilter 
+                    filter={filter}
+                    onFilterSelect={this.onFilterSelect}/>
                 </div>
     
                 <EmployeesList 
