@@ -1,6 +1,8 @@
 // import { Component } from 'react/cjs/react.development';
 import './app-filter.css';
 
+
+// Д.З. по настройке фильтров на нативном JS
 // class AppFilter extends Component {
 //     constructor (props) {
 //         super(props);
